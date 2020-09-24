@@ -26,6 +26,7 @@ import Gallery from './Gallery';
       photos: [],
       kitty: [],
       dog: [],
+      search:'',
       computer: [],
       loading: true
     };
@@ -102,10 +103,10 @@ import Gallery from './Gallery';
           <Nav />
           <Switch>
             <Route exact path="/" render={() => <Gallery value={this.state.photos}/>} />
-            <Route path="/search/:tags" render={() => <Gallery value={this.state.photos}/>} />
-            <Route  path="/cats" render={() => <Gallery value={this.state.kitty} />} />
-            <Route  path="/dogs" render={() => <Gallery value={this.state.dog} />} />
-            <Route  path="/computers" render={() => <Gallery value={this.state.computer} />} />
+            <Route exact path="/search/:tags" render={() => <Gallery value={this.state.photos} tags={this.state.tags}/>} />
+            <Route exact path="/cats" render={() => <Gallery value={this.state.kitty} />} />
+            <Route exact path="/dogs" render={() => <Gallery value={this.state.dog} />} />
+            <Route exact path="/computers" render={() => <Gallery value={this.state.computer} />} />
 
           </Switch>
         </div>
