@@ -4,7 +4,7 @@ import './App.css';
 import {
   BrowserRouter,
   Route,
-  Switch
+  Switch,
 } from 'react-router-dom';
 //Fetch/get middleware import
 import axios from 'axios';
@@ -41,18 +41,7 @@ import Gallery from './Gallery';
     }
 
   //Fetch Search results and set loading state to false
-  performSearch = ( query = 'flags') => {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${ query }&per_page=24&page=1&format=json&nojsoncallback=1`)
-  .then(response => {
-    this.setState({
-      photos: response.data.photos.photo,
-      loading: false,
-    });
-  })
-     .catch(error => {
-     console.log('Error fetching and parsing data', error);
-     });
-  }
+  
 
   searchPuppy = ( query = 'puppy' ) => {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${ query }&per_page=24&page=1&format=json&nojsoncallback=1`)
@@ -93,20 +82,36 @@ import Gallery from './Gallery';
      });
   }
 
+  performSearch = ( query ) => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${ query }&per_page=24&page=1&format=json&nojsoncallback=1`)
+  .then(response => {
+    this.setState({
+      photos: response.data.photos.photo,
+      search: query,
+      loading: false,
+    });
+  })
+     .catch(error => {
+     console.log('Error fetching and parsing data', error);
+     });
+  }
   //Render Compononts and pass props
   render (){
     console.log(this.state.photos);
     return (
        <BrowserRouter>
         <div className="container">
-          <SearchForm onSearch={this.performSearch}/>
+          <SearchForm onSearch={this.performSearch} query={this.state.search}/>
           <Nav />
           <Switch>
-            <Route exact path="/" render={() => <Gallery value={this.state.photos}/>} />
-            <Route exact path="/search/:tags" render={() => <Gallery value={this.state.photos} tags={this.state.tags}/>} />
+            <Route exact path="/" render={() => <Gallery value={this.state.kitty}/>} />
+            
             <Route exact path="/cats" render={() => <Gallery value={this.state.kitty} />} />
             <Route exact path="/dogs" render={() => <Gallery value={this.state.dog} />} />
             <Route exact path="/computers" render={() => <Gallery value={this.state.computer} />} />
+            
+            <Route path="/search/:tags" render={({match}) => {this.performSearch(match.params.tags)
+            return (<Gallery value={this.state.photos}/>);}} />
 
           </Switch>
         </div>
