@@ -100,7 +100,6 @@ import PageNotFound from './component/PageNotFound'
   }
   //Render Compononts and passes props
   render (){
-    console.log(this.state.photos);
     return (
        <BrowserRouter>
         <div className="container">
