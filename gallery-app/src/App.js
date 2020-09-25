@@ -116,7 +116,10 @@ import PageNotFound from './component/PageNotFound'
             <Route exact path="/dogs" render={() => <Gallery value={this.state.dog} />} />
             <Route exact path="/computers" render={() => <Gallery value={this.state.computer} />} />
             
-            <Route path="/:tags" render={({match}) => <Gallery value={this.state.photos} />} />
+            <Route path="/search/:tags" render={({match}) => {this.performSearch(match.params.tags)
+            
+            return (<Gallery value={this.state.photos}/>);}} />
+
 
             <Route component={PageNotFound}/>
           </Switch>
