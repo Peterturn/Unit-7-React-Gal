@@ -10,12 +10,14 @@ import {
 import axios from 'axios';
 
 //JS Imports
-import { apiKey } from './Key';
-import SearchForm from './SearchForm';
+import { apiKey } from './component/Key';
+import SearchForm from './component/SearchForm';
 //Button Navigation
-import Nav from './Nav';
+import Nav from './component/Nav';
 //Photo Contianer
-import Gallery from './Gallery';
+import Gallery from './component/Gallery';
+//404 page
+import PageNotFound from './component/PageNotFound'
 
 
 
@@ -81,6 +83,7 @@ import Gallery from './Gallery';
      console.log('Error fetching and parsing data', error);
      });
   }
+  // This is called inside the SearchForm componant when a search is typed into the input
 
   performSearch = ( query ) => {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${ query }&per_page=24&page=1&format=json&nojsoncallback=1`)
@@ -95,24 +98,27 @@ import Gallery from './Gallery';
      console.log('Error fetching and parsing data', error);
      });
   }
-  //Render Compononts and pass props
+  //Render Compononts and passes props
   render (){
     console.log(this.state.photos);
     return (
        <BrowserRouter>
         <div className="container">
+        {/* Search form is passed the axios function plus the empty string which gets update with the URL for browser history*/}
           <SearchForm onSearch={this.performSearch} query={this.state.search}/>
+          
           <Nav />
           <Switch>
+          {/* Search form is passed the axios function plus the empty string which gets update with the URL for browser history*/}
             <Route exact path="/" render={() => <Gallery value={this.state.kitty}/>} />
             
             <Route exact path="/cats" render={() => <Gallery value={this.state.kitty} />} />
             <Route exact path="/dogs" render={() => <Gallery value={this.state.dog} />} />
             <Route exact path="/computers" render={() => <Gallery value={this.state.computer} />} />
             
-            <Route path="/search/:tags" render={({match}) => {this.performSearch(match.params.tags)
+            <Route path="/search/:tags" component={({match}) => {this.performSearch(match.params.tags) 
             return (<Gallery value={this.state.photos}/>);}} />
-
+            <Route component={PageNotFound}/>
           </Switch>
         </div>
       </BrowserRouter>
